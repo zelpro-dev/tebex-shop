@@ -1,4 +1,4 @@
-import { WEB_URL, TEBEX_SECRET, TEBEX_STORE_ID } from "@/app/utils/constants";
+import { WEB_URL, TEBEX_SECRET, TEBEX_STORE_ID } from "@/utils/constants";
 import axios from "axios";
 import { NextResponse } from "next/server";
 

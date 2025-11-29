@@ -3,10 +3,11 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useAuth } from "@/app/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { Avatar, AvatarImage, AvatarFallback } from "@/app/components/ui/Avatar";
-import LoadingSpinner from "@/app/components/ui/LoadingSpinner";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/Avatar";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import { ShoppingBasketIcon } from "lucide-react";
 
 export default function Navbar() {
   const { user, handleLogin, handleLogout } = useAuth();
@@ -16,7 +17,7 @@ export default function Navbar() {
 
   const routes = [
     { name: "Inicio", href: "/" },
-    { name: "Tienda", href: "/shop" },
+    { name: "Tienda", href: "/packages" },
     { name: "Soporte", href: "/support" },
   ];
 
@@ -40,19 +41,12 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="w-full bg-gray-900 text-white shadow-md">
+    <nav className="fixed top-0 w-full bg-black/40 backdrop-blur-md border border-b border-white/10 py-3 text-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-10 items-center justify-between">
           {/* Logo + Nombre */}
-          <Link href="/" className="flex items-center gap-2 text-2xl font-semibold">
-            <Image
-              src="/logo.png"
-              alt="Logo"
-              width={36}
-              height={36}
-              className="rounded"
-            />
-            MiTienda
+          <Link href="/" className="text-xl font-bold">
+            Example Shop
           </Link>
 
           {/* Rutas centradas */}
@@ -61,7 +55,7 @@ export default function Navbar() {
               <Link
                 key={route.name}
                 href={route.href}
-                className="hover:text-gray-300 transition"
+                className="text-white/80 hover:text-white font-semibold transition-all duration-200"
               >
                 {route.name}
               </Link>
@@ -71,10 +65,13 @@ export default function Navbar() {
           {/* Usuario o login */}
           <div className="hidden md:flex items-center gap-4">
             {user ? (
-              <div className="relative">
+              <div className="flex gap-3 items-center relative">
+                <button className="cursor-pointer bg-white/10 p-3 rounded-full hover:bg-white/15 border border-white/10 transition">
+                  <ShoppingBasketIcon size={24} className="text-white/80 hover:text-white" />
+                </button>
                 <button
                   onClick={() => setMobileUserMenuOpen(!mobileUserMenuOpen)}
-                  className="flex items-center gap-2 bg-gray-800 px-3 py-1 rounded-md hover:bg-gray-700 transition"
+                  className="flex items-center gap-3 cursor-pointer bg-white/10 px-3 py-2 rounded-full hover:bg-white/15 border border-white/10 transition"
                 >
                   <Avatar>
                     <AvatarImage src={user.avatar} alt={user.username} />
@@ -82,7 +79,7 @@ export default function Navbar() {
                       {user.username.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
-                  <span>{user.username}</span>
+                  <span className="pt-1 pr-1 font-semibold">{user.username}</span>
                 </button>
 
                 <AnimatePresence>
@@ -91,11 +88,11 @@ export default function Navbar() {
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
-                      className="absolute right-0 mt-2 w-40 bg-gray-800 rounded-md shadow-lg overflow-hidden z-50"
+                      className="absolute right-0 mt-2 w-40 bg-black border border-white/10 rounded-2xl shadow-lg overflow-hidden z-50"
                     >
                       <button
                         onClick={onLogout}
-                        className="block w-full text-left px-4 py-2 hover:bg-gray-700 transition"
+                        className="block w-full text-left px-4 py-2 hover:bg-neutral-900 cursor-pointer transition"
                       >
                         Cerrar sesión
                       </button>
@@ -107,9 +104,9 @@ export default function Navbar() {
               <button
                 onClick={onLogin}
                 disabled={isLoggingIn}
-                className="bg-blue-600 px-4 py-2 rounded-md hover:bg-blue-500 transition"
+                className="bg-white px-4 py-2 rounded-full font-semibold hover:bg-white/90 cursor-pointer text-black transition-all duration-200"
               >
-                {isLoggingIn ? <LoadingSpinner size="sm" /> : "Iniciar sesión"}
+                {isLoggingIn ? "Cargando..." : "Iniciar sesión"}
               </button>
             )}
           </div>
@@ -153,7 +150,7 @@ export default function Navbar() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden mt-2 bg-gray-800 rounded-md shadow-lg overflow-hidden"
+              className="md:hidden mt-2 overflow-hidden"
             >
               {routes.map((route) => (
                 <Link

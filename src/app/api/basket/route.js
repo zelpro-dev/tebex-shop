@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
-import { WEB_URL, TEBEX_SECRET, TEBEX_STORE_ID, TEBEX_API } from "@/app/utils/constants";
+import { WEB_URL, TEBEX_SECRET, TEBEX_STORE_ID, TEBEX_API } from "@/utils/constants";
 
 // GET /api/basket → obtener basket
 export async function GET(req) {

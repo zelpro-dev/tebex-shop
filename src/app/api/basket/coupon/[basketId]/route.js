@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
-import { TEBEX_SECRET, TEBEX_STORE_ID, TEBEX_API } from "@/app/utils/constants";
+import { TEBEX_SECRET, TEBEX_STORE_ID, TEBEX_API } from "@/utils/constants";
 
 export async function POST(req, { params }) {
   try {

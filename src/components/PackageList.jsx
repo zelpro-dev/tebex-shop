@@ -1,6 +1,6 @@
 "use client";
 
-import { usePackages } from "@/app/context/PackageContext";
+import { usePackages } from "@/context/PackageContext";
 import Image from "next/image";
 
 export default function PackageList() {
@@ -14,7 +14,7 @@ export default function PackageList() {
       {packages.map((pkg) => (
         <li key={pkg.id}>
           <h3>{pkg.name}</h3>
-          <Image src={pkg.image} height={300} width={600} />
+          <Image src={pkg.image} height={300} width={600} alt="a" />
         </li>
       ))}
     </ul>
