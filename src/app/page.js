@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import { useAuth } from "@/app/context/AuthContext";
+import PackageList from "./components/PackageList";
 
 export default function Home() {
-  const { user, loading, login, logout } = useAuth();
+  const { user, loading, handleLogin, handleLogout } = useAuth();
 
   // Mientras cargamos la sesión
   if (loading) {
@@ -40,8 +41,8 @@ export default function Home() {
 
           <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
             <button
-              onClick={login}
-              className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
+              onClick={handleLogin}
+              className="flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
             >
               Iniciar sesión con Tebex
             </button>
@@ -70,9 +71,10 @@ export default function Home() {
         <p className="text-lg text-zinc-600 dark:text-zinc-400">
           Has iniciado sesión correctamente.
         </p>
+        <PackageList />
         <button
-          onClick={logout}
-          className="mt-6 flex h-12 items-center justify-center gap-2 rounded-full bg-red-500 px-5 text-white transition-colors hover:bg-red-600 md:w-[158px]"
+          onClick={handleLogout}
+          className="mt-6 flex h-12 cursor-pointer items-center justify-center gap-2 rounded-full bg-red-500 px-5 text-white transition-colors hover:bg-red-600 md:w-[158px]"
         >
           Cerrar sesión
         </button>
