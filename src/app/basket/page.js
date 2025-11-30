@@ -5,9 +5,20 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { Trash } from "lucide-react";
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 
 export default function BasketPage() {
-  const { user, addToBasket, removeFromBasket, handleCheckout, loading } = useAuth();
+  const { user, addToBasket, removeFromBasket, handleCheckout, loading } =
+    useAuth();
   const router = useRouter();
 
   // -------------------------
@@ -49,41 +60,33 @@ export default function BasketPage() {
 
         <div className="space-y-6">
           {user.packages.map((item) => (
-            <div
-              key={item.id}
-              className="flex items-center gap-6 bg-white dark:bg-zinc-900 p-3 rounded-xl shadow border border-zinc-200 dark:border-zinc-800"
-            >
-              {/* IMG */}
-              <div className="relative w-24 h-12">
+            <Card className="w-full items-stretch md:flex-row" key={item.id}>
+              <div className="relative h-[140px] w-full flex-shrink-0 overflow-hidden rounded-2xl sm:h-[120px] sm:w-[120px]">
                 <Image
-                  src={item.image || "/placeholder.png"}
+                  src={item.image}
                   alt={item.name}
                   fill
-                  className="object-cover rounded-lg"
                 />
               </div>
-
-              {/* TEXT */}
-              <div className="flex-1">
-                <h2 className="text-xl font-semibold text-black dark:text-white">
-                  {item.name}
-                </h2>
-                <span>Quantity: {item.in_basket.quantity}</span>
+              <div className="flex flex-1 flex-col gap-3">
+                <CardHeader className="gap-1">
+                  <CardTitle className="pr-8">{item.name}</CardTitle>
+                  <CardDescription>
+                    Quantity: {item.in_basket.quantity}
+                  </CardDescription>
+                </CardHeader>
+                <CardFooter className="mt-auto flex w-full flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex flex-col">{item.in_basket.price}€</div>
+                  <Button
+                    variant="outline" 
+                    size="icon"
+                    onClick={() => removeFromBasket(item.id)}
+                  >
+                    <Trash size={16} />
+                  </Button>
+                </CardFooter>
               </div>
-
-              {/* PRICE */}
-              <div className="text-xl font-bold text-black dark:text-white">
-                {item.in_basket.price}€
-              </div>
-
-              {/* DELETE */}
-              <button
-                onClick={() => removeFromBasket(item.id)}
-                className="p-2 bg-red-600 hover:bg-red-700 text-white cursor-pointer rounded-full font-semibold"
-              >
-                <Trash size={16} />
-              </button>
-            </div>
+            </Card>
           ))}
         </div>
 

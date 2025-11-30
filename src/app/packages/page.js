@@ -3,6 +3,16 @@
 import Image from "next/image";
 import { usePackages } from "@/context/PackageContext";
 import { useAuth } from "@/context/AuthContext";
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 
 export default function ProductsPage() {
   const { packages, loading, error } = usePackages();
@@ -52,7 +62,7 @@ function ProductCard({ product }) {
   const { user, addToBasket } = useAuth();
 
   return (
-    <div className="rounded-2xl bg-white dark:bg-zinc-900 shadow-md hover:shadow-xl transition-all flex flex-col">
+    <Card>
       {/* IMG */}
       <div className="relative w-full h-48 mb-4">
         <Image
@@ -64,20 +74,20 @@ function ProductCard({ product }) {
       </div>
       <div className="px-4 pb-4">
         {/* NAME */}
-        <h2 className="text-2xl font-semibold text-black dark:text-white">
+        <CardTitle className="text-2xl font-semibold text-black dark:text-white">
           {product.name}
-        </h2>
+        </CardTitle>
 
         {/* PRICE + BUTTON */}
-        <div className="mt-4 flex items-center justify-between">
+        <CardFooter className="mt-4 flex items-center justify-between">
           <span className="text-lg font-normal text-black dark:text-white">
             {product.total_price}€
           </span>
-          <button onClick={() => addToBasket(product.id)} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-md font-semibold rounded-full cursor-pointer transition-all duration-200">
+          <Button onClick={() => addToBasket(product.id)} >
             Añadir a la cesta
-          </button>
-        </div>
+          </Button>
+        </CardFooter>
       </div>
-    </div>
+    </Card>
   );
 }

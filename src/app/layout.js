@@ -1,11 +1,12 @@
-import { Poppins } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { PackageProvider } from "../context/PackageContext";
 import Navbar from "../components/Navbar";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
-const poppins = Poppins({
-  variable: "--font-poppins",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
@@ -19,14 +20,21 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${poppins.variable} antialiased`}
+        className={`${inter.variable} antialiased`}
       >
-        <AuthProvider>
-          <PackageProvider>
-            <Navbar />
-            {children}
-          </PackageProvider>
-        </AuthProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AuthProvider>
+            <PackageProvider>
+              <Navbar />
+              {children}
+            </PackageProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

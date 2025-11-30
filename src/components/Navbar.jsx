@@ -2,12 +2,12 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/Avatar";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { ShoppingBasketIcon } from "lucide-react";
+import { Button } from "@/components/ui/button"
 
 export default function Navbar() {
   const { user, handleLogin, handleLogout, loading } = useAuth();
@@ -71,11 +71,10 @@ export default function Navbar() {
               <div className="flex gap-3 items-center relative">
                 {/* Cesta */}
                 <div className="relative">
-                  <Link href="/basket" className="flex cursor-pointer bg-white/10 backdrop-blur-md p-3 rounded-full hover:bg-white/15 border border-white/10 transition">
-                    <ShoppingBasketIcon
-                      size={24}
-                      className="text-white/80 hover:text-white"
-                    />
+                  <Link href="/basket">
+                    <Button variant="outline" size="icon">
+                      <ShoppingBasketIcon size={24} />
+                    </Button>
                   </Link>
 
                   {/* Punto rojo si hay cosas en la cesta */}
