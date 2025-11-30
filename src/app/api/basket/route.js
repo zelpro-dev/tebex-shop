@@ -14,7 +14,30 @@ export async function GET(req) {
       headers: { "X-Tebex-Secret": TEBEX_SECRET },
     });
 
-    return NextResponse.json(response.data);
+    // Obtener avatar desde foro.cfx.re
+    let avatarUrl = null;
+    const user = response.data.data;
+    try {
+      const forumRes = await fetch(`https://forum.cfx.re/u/${user.username}.json`, {
+        cache: "no-store",
+      });
+
+      if (forumRes.ok) {
+        const forumData = await forumRes.json();
+        const template = forumData?.user?.avatar_template;
+        if (template) {
+          avatarUrl = `https://forum.cfx.re${template.replace("{size}", "96")}`;
+        }
+      }
+    } catch (err) {
+      console.warn("No se pudo obtener avatar:", err.message);
+    }
+
+    return NextResponse.json({
+      ...user,
+      avatarUrl,
+    });
+
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Error fetching basket" }, { status: 500 });

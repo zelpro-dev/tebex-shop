@@ -6,7 +6,6 @@ import { useAuth } from "@/context/AuthContext";
 
 export default function ProductsPage() {
   const { packages, loading, error } = usePackages();
-  const { user } = useAuth();
 
   if (loading) {
     return (
@@ -18,7 +17,6 @@ export default function ProductsPage() {
     );
   }
 
-  // 👉 Error
   if (error) {
     return (
       <div className="flex h-screen items-center justify-center bg-zinc-50 dark:bg-black">
@@ -28,14 +26,12 @@ export default function ProductsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-black py-20 px-8">
+    <div className="min-h-screen bg-zinc-50 dark:bg-black py-26 px-8">
       <div className="max-w-6xl mx-auto">
-        {/* TITLE */}
         <h1 className="text-4xl font-bold text-black dark:text-white mb-10">
           Nuestros Productos
         </h1>
 
-        {/* GRID */}
         {packages.length === 0 ? (
           <p className="text-zinc-600 dark:text-zinc-400">
             No hay productos disponibles.
@@ -43,7 +39,7 @@ export default function ProductsPage() {
         ) : (
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
             {packages.map((pkg) => (
-              <ProductCard key={pkg.id} product={pkg} logged={!!user} />
+              <ProductCard key={pkg.id} product={pkg} />
             ))}
           </div>
         )}
@@ -52,7 +48,9 @@ export default function ProductsPage() {
   );
 }
 
-function ProductCard({ product, logged }) {
+function ProductCard({ product }) {
+  const { user, addToBasket } = useAuth();
+
   return (
     <div className="rounded-2xl bg-white dark:bg-zinc-900 shadow-md hover:shadow-xl transition-all flex flex-col">
       {/* IMG */}
@@ -75,8 +73,8 @@ function ProductCard({ product, logged }) {
           <span className="text-lg font-normal text-black dark:text-white">
             {product.total_price}€
           </span>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full cursor-pointer transition-all duration-200">
-            Comprar
+          <button onClick={() => addToBasket(product.id)} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-md font-semibold rounded-full cursor-pointer transition-all duration-200">
+            Añadir a la cesta
           </button>
         </div>
       </div>

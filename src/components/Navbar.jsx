@@ -10,7 +10,7 @@ import LoadingSpinner from "@/components/ui/LoadingSpinner";
 import { ShoppingBasketIcon } from "lucide-react";
 
 export default function Navbar() {
-  const { user, handleLogin, handleLogout } = useAuth();
+  const { user, handleLogin, handleLogout, loading } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileUserMenuOpen, setMobileUserMenuOpen] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
@@ -40,17 +40,20 @@ export default function Navbar() {
     }
   };
 
+  const inBasket = user?.packages.length > 0 || null;
+
   return (
-    <nav className="fixed top-0 w-full bg-black/40 backdrop-blur-md border border-b border-white/10 py-3 text-white shadow-lg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="fixed top-0 w-full text-white shadow-lg">
+      <div class="absolute top-0 h-26 w-full bg-linear-to-b from-black to-transparent inset-0"></div>
+      <div className="max-w-7xl mx-auto py-3 px-4 sm:px-6 lg:px-8 mt-1">
         <div className="flex h-10 items-center justify-between">
           {/* Logo + Nombre */}
-          <Link href="/" className="text-xl font-bold">
+          <Link href="/" className="text-xl font-bold z-10">
             Example Shop
           </Link>
 
           {/* Rutas centradas */}
-          <div className="hidden md:flex gap-6">
+          <div className="hidden md:flex gap-6 bg-white/10 backdrop-blur-md px-6 py-3 rounded-full border border-white/10">
             {routes.map((route) => (
               <Link
                 key={route.name}
@@ -66,20 +69,34 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-4">
             {user ? (
               <div className="flex gap-3 items-center relative">
-                <button className="cursor-pointer bg-white/10 p-3 rounded-full hover:bg-white/15 border border-white/10 transition">
-                  <ShoppingBasketIcon size={24} className="text-white/80 hover:text-white" />
-                </button>
+                {/* Cesta */}
+                <div className="relative">
+                  <Link href="/basket" className="flex cursor-pointer bg-white/10 backdrop-blur-md p-3 rounded-full hover:bg-white/15 border border-white/10 transition">
+                    <ShoppingBasketIcon
+                      size={24}
+                      className="text-white/80 hover:text-white"
+                    />
+                  </Link>
+
+                  {/* Punto rojo si hay cosas en la cesta */}
+                  {inBasket && (
+                    <span className="absolute top-[3px] right-[3px] bg-red-500 w-3 h-3 animate-pulse rounded-full border border-black" />
+                  )}
+                </div>
+
                 <button
                   onClick={() => setMobileUserMenuOpen(!mobileUserMenuOpen)}
                   className="flex items-center gap-3 cursor-pointer bg-white/10 px-3 py-2 rounded-full hover:bg-white/15 border border-white/10 transition"
                 >
                   <Avatar>
-                    <AvatarImage src={user.avatar} alt={user.username} />
+                    <AvatarImage src={user.avatarUrl} alt={user.username} />
                     <AvatarFallback className="rounded-full bg-blue-500 text-white font-bold">
                       {user.username.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="pt-1 pr-1 font-semibold">{user.username}</span>
+                  <span className="pt-1 pr-1 font-semibold">
+                    {user.username}
+                  </span>
                 </button>
 
                 <AnimatePresence>
@@ -88,7 +105,7 @@ export default function Navbar() {
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
-                      className="absolute right-0 mt-2 w-40 bg-black border border-white/10 rounded-2xl shadow-lg overflow-hidden z-50"
+                      className="absolute right-0 mt-26 w-40 bg-black border border-white/10 rounded-2xl shadow-lg overflow-hidden z-50"
                     >
                       <button
                         onClick={onLogout}
@@ -113,6 +130,20 @@ export default function Navbar() {
 
           {/* Botón hamburguesa para móvil */}
           <div className="md:hidden flex items-center">
+            {/* Cesta */}
+            <div className="relative mr-2">
+              <Link href="/basket" className="flex cursor-pointer bg-white/10 backdrop-blur-md p-3 rounded-full hover:bg-white/15 border border-white/10 transition">
+                <ShoppingBasketIcon
+                  size={24}
+                  className="text-white/80 hover:text-white"
+                />
+              </Link>
+
+              {/* Punto rojo si hay cosas en la cesta */}
+              {inBasket && (
+                <span className="absolute top-[3px] right-[3px] bg-red-500 w-3 h-3 animate-pulse rounded-full border border-black" />
+              )}
+            </div>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="focus:outline-none"
@@ -175,7 +206,11 @@ export default function Navbar() {
                   onClick={onLogin}
                   className="block w-full text-left px-4 py-2 hover:bg-gray-700 transition"
                 >
-                  {isLoggingIn ? <LoadingSpinner size="sm" /> : "Iniciar sesión"}
+                  {isLoggingIn ? (
+                    <LoadingSpinner size="sm" />
+                  ) : (
+                    "Iniciar sesión"
+                  )}
                 </button>
               )}
             </motion.div>

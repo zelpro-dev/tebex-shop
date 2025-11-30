@@ -6,7 +6,7 @@ export async function POST(req, { params }) {
     const basketId = req.cookies.get("basketId")?.value;
     if (!basketId) return NextResponse.json({ error: "No basketId" }, { status: 401 });
 
-    const { packageId } = params;
+    const { packageId } = await params;
 
     const response = await fetch(`${TEBEX_API}/baskets/${basketId}/packages/remove`, {
       method: "POST",

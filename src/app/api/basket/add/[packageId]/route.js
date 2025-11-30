@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import { TEBEX_SECRET, TEBEX_STORE_ID, TEBEX_API } from "@/utils/constants";
+import { TEBEX_SECRET, TEBEX_API } from "@/utils/constants";
 
 export async function POST(req, { params }) {
   try {
     const basketId = req.cookies.get("basketId")?.value;
     if (!basketId) return NextResponse.json({ error: "No basketId" }, { status: 401 });
 
-    const { packageId } = params;
+    const { packageId } = await params;
 
     const response = await fetch(`${TEBEX_API}/baskets/${basketId}/packages`, {
       method: "POST",
